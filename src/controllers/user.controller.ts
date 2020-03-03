@@ -36,7 +36,7 @@ export const signIn = async (req: Request, res: Response) => {
     }
     const user = await User.findOne({email: req.body.email});
     if (!user) {
-        return res.status(500).json({msg: 'Aquest usuari no està registrat'});
+        return res.status(400).json({msg: 'Aquest usuari no està registrat'});
     }
 
     const isMatch = await user.comparePassword(req.body.password)
@@ -45,5 +45,5 @@ export const signIn = async (req: Request, res: Response) => {
         return res.status(200).json({email: user.email, name: user.name,
             surname: user.surname, age: user.age, id: user.id, token: 'Bearer ' + createToken(user)});
     }
-    return res.status(500).json({msg: 'Contrasenya incorrecte'});
+    return res.status(400).json({msg: 'Contrasenya incorrecte'});
 }
