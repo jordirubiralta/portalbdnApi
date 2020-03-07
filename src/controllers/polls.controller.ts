@@ -30,30 +30,49 @@ export const getPolls = async (req: Request, res: Response) => {
         var pollUser = await PollUser.findOne()
             .where('user_id').equals(req.body.user_id)
             .where('poll_id').equals(poll.id);
-        result.push({poll_id: poll.id, question: poll.question, userAnswer: pollUser?.answer})
+        result.push({poll_id: poll.id, question: poll.question, answer: pollUser?.answer})
     }
     return res.status(200).json(result)
 }
 
 export const answerPoll = async (req: Request, res: Response) => {
-    if (!req.body.user_id || !req.body.poll_id || !req.body.answer) {
+    console.log(req.body)
+    if (!req.body.user_id || !req.body.poll_id) {
         return res.status(400).json({msg: 'Falten dades'});
     }
-    const pollUser = new PollUser(
+    const newPollUser = new PollUser(
         {
             user_id: req.body.user_id,
             poll_id: req.body.poll_id,
             answer: req.body.answer,
         });
+
+    const pollUser = await PollUser.findOne({user_id: newPollUser.user_id, poll_id: newPollUser.poll_id})
     const poll = await Poll.findOne({_id: req.body.poll_id});
-    console.log
-    if (poll != null) {
-        if (pollUser.answer) {
-            await poll.updateOne({yes: ++poll.yes})
-        } else {
-            await poll.updateOne({no: ++poll.no})
+
+    if (pollUser) {
+        if (poll != null) {
+            if (pollUser.answer) {
+                await poll.updateOne({yes: --poll.yes})
+            } else {
+                await poll.updateOne({no: --poll.no})
+            }
+            if (newPollUser.answer) {
+                await poll.updateOne({yes: ++poll.yes})
+            } else {
+                await poll.updateOne({no: ++poll.no})
+            }
+            await pollUser.updateOne({answer: newPollUser.answer})
         }
-        await pollUser.save()
+    } else {
+        if (poll != null) {
+            if (newPollUser.answer) {
+                await poll.updateOne({yes: ++poll.yes})
+            } else {
+                await poll.updateOne({no: ++poll.no})
+            }
+            await newPollUser.save()
+        }
     }
     return res.status(200).json(poll)
 }
