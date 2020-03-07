@@ -25,6 +25,6 @@ export const getIncidents = async (req: Request, res: Response) => {
     if (!req.body.user_id) {
         return res.status(400).json({msg: 'Falta l\'id de l\'usuari'});
     }
-    const incidents = await Incident.find({}).where('user_id').equals(req.body.user_id);
+    const incidents = await Incident.find().where('user_id').equals(req.body.user_id).sort({"date": -1});
     return res.status(200).json(incidents)
 }

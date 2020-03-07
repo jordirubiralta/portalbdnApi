@@ -2,8 +2,9 @@ import {model, Schema, Document } from 'mongoose'
 
 export interface IPoll extends Document {
     question: string;
-    yes: Number;
-    no: Number;
+    yes: number;
+    no: number;
+    date: Date;
 }
 
 
@@ -19,7 +20,11 @@ const pollSchema = new Schema({
     no: {
         type: Number,
         required: true
+    },
+    date: {
+        type: Date,
+        required: true
     }
 });
 
-export default model<IPoll>('Event', pollSchema);
+export default model<IPoll>('Poll', pollSchema);

@@ -7,6 +7,7 @@ export interface IIncidencia extends Document {
     description: Number;
     date: string;
     location: string;
+    resolved: Boolean;
 }
 
 const incidentSchema = new Schema({
