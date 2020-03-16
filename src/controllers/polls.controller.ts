@@ -21,8 +21,23 @@ export const addPoll = async (req: Request, res: Response) => {
 }
 
 export const getPolls = async (req: Request, res: Response) => {
+    /*const token = req.headers.authorization;
+    if (token) {
+        jwt.verify(token, config.JWTSECRET, (err, decoded) => {      
+          if (err) {
+            return res.json({ mensaje: 'Token inválida' });    
+          } else {
+            /*req.decoded = decoded;    
+            next();
+          }
+        });
+      } else {
+        res.send({ 
+            mensaje: 'Token no proveída.' 
+        });
+    }*/
     if (!req.body.user_id) {
-        return res.status(400).json({msg: 'Falta l\'id de l\'usuari'});
+        return res.status(401).json({msg: 'Falta l\'id de l\'usuari'});
     }
     const polls = await Poll.find()
     var result = Array();
@@ -38,7 +53,7 @@ export const getPolls = async (req: Request, res: Response) => {
 export const answerPoll = async (req: Request, res: Response) => {
     console.log(req.body)
     if (!req.body.user_id || !req.body.poll_id) {
-        return res.status(400).json({msg: 'Falten dades'});
+        return res.status(401).json({msg: 'Falten dades'});
     }
     const newPollUser = new PollUser(
         {

@@ -11,7 +11,7 @@ router.post('/addIncidencia', addIncidencia, passport.authenticate('jwt', { sess
 
 router.post('/addEvent', addEvent, passport.authenticate('jwt', { session: false }))
 router.post('/updateEvent', updateEvent, passport.authenticate('jwt', { session: false }))
-router.get('/getEvents', getEvents, passport.authenticate('jwt', { session: false }))
+router.get('/getEvents', getEvents, passport.authenticate('jwt', { session: true }))
 
 router.post('/getPolls', getPolls, passport.authenticate('jwt', { session: false }))
 router.post('/addPoll', addPoll, passport.authenticate('jwt', { session: false }))

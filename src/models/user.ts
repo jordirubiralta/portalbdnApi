@@ -7,6 +7,7 @@ export interface IUser extends Document {
     age: Number;
     name: string;
     surname: string;
+    newspaper: string;
     comparePassword: (password: string) => Promise<Boolean>
 }
 
@@ -31,6 +32,10 @@ const userSchema = new Schema({
         required: true
     },
     surname: {
+        type: String,
+        required: true
+    },
+    newspaper: {
         type: String,
         required: true
     }

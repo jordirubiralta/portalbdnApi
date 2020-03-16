@@ -4,6 +4,7 @@ import cors from 'cors'
 import passport from 'passport'
 import passportMiddleware from './middlewares/passport'
 
+import config from './config/config'
 import authRoutes from './routes/auth.routes'
 import specialRoutes from './routes/special.routes'
 
@@ -11,6 +12,7 @@ import specialRoutes from './routes/special.routes'
 const app = express();
 
 // settings
+app.set('secret', config.JWTSECRET);
 app.set('port', process.env.PORT || 3000);
 
 //middlewares

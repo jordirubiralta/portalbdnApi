@@ -5,9 +5,9 @@ import config from '../config/config'
 import dateformat from 'dateformat'
 
 export const addEvent = async (req: Request, res: Response) => {
-    if (!req.body.title || !req.body.description || !req.body.date || !req.body.img 
-        || !req.body.organizator) {
-        return res.status(400).json({msg: 'Falten dades'});
+    if (!req.body.title || !req.body.description || !req.body.date || !req.body.img ||
+        !req.body.location || !req.body.organizator) {
+        return res.status(401).json({msg: 'Falten dades'});
     }
     const event = new Event(
         {
@@ -15,6 +15,7 @@ export const addEvent = async (req: Request, res: Response) => {
             description: req.body.description,
             date: dateformat(new Date(), req.body.date),
             img: req.body.img,
+            location: req.body.location,
             organizator: req.body.organizator
         });
     await event.save()
@@ -24,11 +25,11 @@ export const addEvent = async (req: Request, res: Response) => {
 
 export const updateEvent = async (req: Request, res: Response) => {
     if (!req.body.id) {
-        return res.status(400).json({msg: 'Falta l\'id'});
+        return res.status(401).json({msg: 'Falta l\'id'});
     }
     const event = await Event.findOne({_id: req.body.id});
     if (!event) {
-        return res.status(400).json({msg: 'No existeix cap esdeveniment amb aquest id'});
+        return res.status(402).json({msg: 'No existeix cap esdeveniment amb aquest id'});
     }
     
     await event.updateOne(req.body)
@@ -38,7 +39,6 @@ export const updateEvent = async (req: Request, res: Response) => {
 }
 
 export const getEvents = async (req: Request, res: Response) => {
-
     const events = await Event.find({}).where('date < Date.now()')
     return res.status(200).json(events)
 }
