@@ -7,7 +7,6 @@ export interface IPoll extends Document {
     date: Date;
 }
 
-
 const pollSchema = new Schema({
     question: {
         type: String, 
